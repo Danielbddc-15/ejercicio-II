@@ -23,9 +23,10 @@
 
 ## Próximos Pasos:
 
-### 📋 Paso 4: Instalar WiFi Library
-- [ ] Instalar react-native-wifi-reborn
-- [ ] Configurar dependencias nativas
+### ✅ Paso 4: Instalar WiFi Library (Este commit)
+- [x] Instalar react-native-wifi-reborn v4.13.0
+- [x] Configurar permisos Android (AndroidManifest.xml)
+- [x] Verificar instalación correcta
 
 ### 📋 Paso 5: WiFi Scanner
 - [ ] Implementar ListView con WiFis disponibles
