@@ -483,13 +483,13 @@
             
             try {
                 // Paso 6: Sistema multiidioma - usar chistes locales traducidos
-                console.log('Fetching joke for language:', currentLang);
-                const jokes = localJokes[currentLang] || localJokes.en;
+                console.log('Fetching joke for language:', currentLanguage);
+                const jokes = localJokes[currentLanguage] || localJokes.en;
                 const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
                 console.log('Selected joke:', randomJoke);
                 jokeText.textContent = randomJoke;
             } catch (error) {
-                jokeText.textContent = translations[currentLang].noJokeAvailable;
+                jokeText.textContent = translations[currentLanguage].noJokeAvailable;
             } finally {
                 isLoading = false;
                 updateUIText();
