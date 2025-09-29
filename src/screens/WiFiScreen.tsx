@@ -33,11 +33,11 @@ const WiFiScreen: React.FC = () => {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
-            title: t('locationPermissionTitle'),
-            message: t('locationPermissionMessage'),
-            buttonNeutral: t('askMeLater'),
-            buttonNegative: t('cancel'),
-            buttonPositive: t('ok'),
+            title: 'Location Permission',
+            message: 'This app needs location access to scan WiFi networks',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
           }
         );
         return granted === PermissionsAndroid.RESULTS.GRANTED;
@@ -52,17 +52,19 @@ const WiFiScreen: React.FC = () => {
   const scanWiFiNetworks = async () => {
     const hasPermission = await requestLocationPermission();
     if (!hasPermission) {
-      Alert.alert(t('error'), t('locationPermissionRequired'));
+      Alert.alert('Error', 'Location permission is required to scan WiFi');
       return;
     }
 
     setScanning(true);
     try {
+      // Paso 5: Escanear WiFis disponibles usando react-native-wifi-reborn
       const networks = await WifiManager.loadWifiList();
+      console.log('WiFi networks found:', networks.length);
       setWifiNetworks(networks);
     } catch (error) {
       console.error('Error scanning WiFi:', error);
-      Alert.alert(t('error'), t('wifiScanError'));
+      Alert.alert('Error', 'Error scanning WiFi networks');
     } finally {
       setScanning(false);
     }
@@ -74,26 +76,29 @@ const WiFiScreen: React.FC = () => {
 
   const renderWiFiItem = ({item}: {item: WiFiNetwork}) => (
     <View style={styles.wifiItem}>
-      <Text style={styles.ssid}>{item.SSID || t('hiddenNetwork')}</Text>
+      <Text style={styles.ssid}>{item.SSID || 'Hidden Network'}</Text>
       <Text style={styles.signal}>
-        {t('signalStrength')}: {item.level} dBm
+        Signal: {item.level} dBm
       </Text>
       <Text style={styles.security}>
-        {t('security')}: {item.capabilities || t('open')}
+        Security: {item.capabilities || 'Open'}
+      </Text>
+      <Text style={styles.frequency}>
+        Frequency: {item.frequency} MHz
       </Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t('wifiScanner')}</Text>
+      <Text style={styles.title}>WiFi Scanner</Text>
       
       <TouchableOpacity
         style={styles.scanButton}
         onPress={scanWiFiNetworks}
         disabled={scanning}>
         <Text style={styles.scanButtonText}>
-          {scanning ? t('scanning') : t('scanWifi')}
+          {scanning ? 'Scanning...' : 'Scan WiFi Networks'}
         </Text>
       </TouchableOpacity>
 
@@ -109,7 +114,7 @@ const WiFiScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <Text style={styles.emptyText}>
-            {scanning ? t('scanningWifi') : t('noWifiNetworks')}
+            {scanning ? 'Scanning WiFi networks...' : 'No WiFi networks found. Tap "Scan WiFi Networks" to search.'}
           </Text>
         }
       />
@@ -168,6 +173,10 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   security: {
+    fontSize: 14,
+    color: '#666',
+  },
+  frequency: {
     fontSize: 14,
     color: '#666',
   },

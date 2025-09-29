@@ -28,10 +28,12 @@
 - [x] Configurar permisos Android (AndroidManifest.xml)
 - [x] Verificar instalación correcta
 
-### 📋 Paso 5: WiFi Scanner
-- [ ] Implementar ListView con WiFis disponibles
-- [ ] Escaneo de redes WiFi usando la librería
-- [ ] Mostrar información de cada red (SSID, señal, seguridad)
+### ✅ Paso 5: WiFi Scanner (Este commit)
+- [x] ListView con FlatList para mostrar WiFis disponibles
+- [x] Escaneo de redes WiFi usando react-native-wifi-reborn
+- [x] Mostrar información de cada red (SSID, señal, seguridad, frecuencia)
+- [x] Manejo de permisos de ubicación en Android
+- [x] Estados de carga y mensajes informativos
 
 ### 📋 Paso 6: Configuración de idiomas
 - [ ] Sistema de cambio de idioma

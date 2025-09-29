@@ -503,16 +503,17 @@
             updateUIText();
             button.disabled = true;
             
-            wifiList.innerHTML = '<div class="loading">Escaneando redes WiFi...</div>';
+            wifiList.innerHTML = '<div class="loading">Scanning WiFi networks...</div>';
             
-            // Simulate WiFi scan
+            // Paso 5: Simular escaneo WiFi con ListView
             setTimeout(() => {
                 const mockWiFiNetworks = [
-                    { ssid: 'WiFi_Casa', signal: -45, security: 'WPA2' },
-                    { ssid: 'MOVISTAR_1234', signal: -67, security: 'WPA2' },
-                    { ssid: 'Red_Publica', signal: -72, security: 'Abierta' },
-                    { ssid: 'WiFi_Oficina', signal: -58, security: 'WPA3' },
-                    { ssid: 'Red_Oculta', signal: -80, security: 'WPA2' }
+                    { ssid: 'Home_WiFi_5G', signal: -42, security: 'WPA3', frequency: 5180 },
+                    { ssid: 'NETGEAR_Guest', signal: -55, security: 'WPA2', frequency: 2447 },
+                    { ssid: 'Office_Network', signal: -63, security: 'WPA2', frequency: 5745 },
+                    { ssid: 'Public_WiFi', signal: -78, security: 'Open', frequency: 2412 },
+                    { ssid: 'Hidden Network', signal: -85, security: 'WPA2', frequency: 2462 },
+                    { ssid: 'Smartphone_Hotspot', signal: -51, security: 'WPA2', frequency: 2437 }
                 ];
                 
                 wifiList.innerHTML = '';
@@ -521,16 +522,19 @@
                     wifiItem.className = 'wifi-item';
                     wifiItem.innerHTML = `
                         <div class="wifi-ssid">${network.ssid}</div>
-                        <div class="wifi-info">Señal: ${network.signal} dBm</div>
-                        <div class="wifi-info">Seguridad: ${network.security}</div>
+                        <div class="wifi-info">Signal: ${network.signal} dBm</div>
+                        <div class="wifi-info">Security: ${network.security}</div>
+                        <div class="wifi-info">Frequency: ${network.frequency} MHz</div>
                     `;
                     wifiList.appendChild(wifiItem);
                 });
                 
+                console.log('WiFi networks found:', mockWiFiNetworks.length);
+                
                 isLoading = false;
                 updateUIText();
                 button.disabled = false;
-            }, 2000);
+            }, 3000);
         }
         
         // Initialize
