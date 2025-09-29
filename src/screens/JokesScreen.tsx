@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
+import LanguageSelector from '../components/LanguageSelector';
 
 interface Joke {
   id: string;
@@ -55,36 +56,41 @@ const localJokes = {
 };
 
 const JokesScreen: React.FC = () => {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const [joke, setJoke] = useState<Joke | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchJoke = async () => {
+  const fetchJoke = useCallback(async () => {
     setLoading(true);
     try {
-      // Consumir API de Chuck Norris según el Paso 3
-      const response = await fetch('https://api.chucknorris.io/jokes/random');
-      const data = await response.json();
-      setJoke(data);
+      const currentLang = i18n.language.split('-')[0] as keyof typeof localJokes; // Extract language code (es, en, pt)
+      console.log('Current language:', currentLang); // Debug log
+      
+      // Siempre usar chistes locales traducidos para mejor experiencia multiidioma
+      const jokes = localJokes[currentLang] || localJokes.en;
+      const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+      setJoke({id: Date.now().toString(), value: randomJoke, url: ''});
+      
+      console.log('Selected joke:', randomJoke); // Debug log
     } catch (error) {
       console.error('Error fetching joke:', error);
-      // En caso de error, mostrar mensaje de error
       setJoke({
         id: 'error',
-        value: 'Error loading joke. Please try again.',
+        value: t('noJokeAvailable'),
         url: ''
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [i18n.language, t]); // Dependencies for useCallback
 
   useEffect(() => {
     fetchJoke();
-  }, []);
+  }, [fetchJoke]); // Re-fetch joke when fetchJoke changes
 
   return (
     <View style={styles.container}>
+      <LanguageSelector />
       <Text style={styles.title}>{t('chuckNorrisJokes')}</Text>
       
       <ScrollView style={styles.jokeContainer} contentContainerStyle={styles.jokeContent}>
