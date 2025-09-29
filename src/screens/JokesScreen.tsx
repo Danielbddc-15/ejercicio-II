@@ -55,35 +55,25 @@ const localJokes = {
 };
 
 const JokesScreen: React.FC = () => {
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const [joke, setJoke] = useState<Joke | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchJoke = async () => {
     setLoading(true);
     try {
-      const currentLang = i18n.language as keyof typeof localJokes;
-      
-      // If language is English, try to get joke from API
-      if (currentLang === 'en') {
-        try {
-          const response = await fetch('https://api.chucknorris.io/jokes/random');
-          const data = await response.json();
-          setJoke(data);
-        } catch (error) {
-          // Fallback to local jokes if API fails
-          const jokes = localJokes[currentLang] || localJokes.en;
-          const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-          setJoke({id: Date.now().toString(), value: randomJoke, url: ''});
-        }
-      } else {
-        // For Spanish and Portuguese, use local translated jokes
-        const jokes = localJokes[currentLang] || localJokes.en;
-        const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-        setJoke({id: Date.now().toString(), value: randomJoke, url: ''});
-      }
+      // Consumir API de Chuck Norris según el Paso 3
+      const response = await fetch('https://api.chucknorris.io/jokes/random');
+      const data = await response.json();
+      setJoke(data);
     } catch (error) {
       console.error('Error fetching joke:', error);
+      // En caso de error, mostrar mensaje de error
+      setJoke({
+        id: 'error',
+        value: 'Error loading joke. Please try again.',
+        url: ''
+      });
     } finally {
       setLoading(false);
     }
